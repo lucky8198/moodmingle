@@ -1,0 +1,154 @@
+user_message,intent_label
+hello,greeting
+hi there,greeting
+hey,greeting
+good morning,greeting
+good evening,greeting
+good afternoon,greeting
+what's up,greeting
+how are you doing,greeting
+how is it going,greeting
+namaste,greeting
+hola,greeting
+hey buddy,greeting
+nice to see you,greeting
+greetings,greeting
+howdy,greeting
+hiya,greeting
+what is happening,greeting
+yo,greeting
+hi bestie,greeting
+hello my friend,greeting
+hey partner,greeting
+good day,greeting
+I am feeling so sad today,negative
+Everything is going wrong,negative
+I failed my exam,negative
+I feel completely helpless,negative
+crying my eyes out,negative
+stress is destroying my life,negative
+I am super depressed,negative
+feeling very anxious,negative
+having a panic attack,negative
+why does everything suck,negative
+just feeling really down,negative
+I am heartbroken,negative
+I lost my job,negative
+I am feeling very lonely tonight,negative
+nobody understands me,negative
+so stressed out,negative
+can not stop worrying,negative
+feel terrible,negative
+worst day of my life,negative
+I just want to give up,negative
+everything feels so heavy,negative
+I am overwhelmed,negative
+my mind is racing,negative
+having chest pain from anxiety,negative
+so sad,negative
+I am feeling super happy!,positive
+I passed my test with flying colors,positive
+got the job!,positive
+I am feeling amazing today,positive
+what a beautiful day,positive
+I am so excited for tomorrow,positive
+feeling great,positive
+this is the best news ever,positive
+I am in love,positive
+could not be happier,positive
+feeling super productive,positive
+feeling really good right now,positive
+I won the competition,positive
+the presentation went incredibly well,positive
+so proud of myself,positive
+feeling on top of the world,positive
+what a wonderful feeling,positive
+I feel full of energy,positive
+having a fantastic time,positive
+feeling very blessed,positive
+I love my life,positive
+where is the nearest hospital,navigation
+navigate to the coffee shop,navigation
+map of hyderabad,navigation
+directions to home,navigation
+route to the airport,navigation
+where am I,navigation
+how far is the station,navigation
+show me the map of the city,navigation
+get directions to the mall,navigation
+distance to bangalore,navigation
+where is the pharmacy,navigation
+show route to office,navigation
+find the nearest restaurant,navigation
+navigation app,navigation
+map of india,navigation
+I am just doing some work,neutral
+eating my lunch,neutral
+reading a book right now,neutral
+nothing much going on,neutral
+sitting on the couch,neutral
+watching some television,neutral
+just a normal day,neutral
+typing on my keyboard,neutral
+staring at the screen,neutral
+drinking water,neutral
+walking down the street,neutral
+getting ready for bed,neutral
+waiting for the bus,neutral
+looking at my phone,neutral
+just chilling,neutral
+nothing special,neutral
+okay,neutral
+alright,neutral
+yes,neutral
+no,neutral
+Hlo,neutral
+Hlo,neutral
+nothing is the life is like daily routine,negative
+nothing is the life is like daily routine,negative
+yes i am free,neutral
+yes i am free,neutral
+hi,neutral
+hi,neutral
+hi,neutral
+hi,neutral
+Hlo baby,neutral
+Hlo baby,neutral
+Hlo babe,neutral
+Hlo babe,neutral
+nothing baby,neutral
+nothing baby,neutral
+hello Baby,neutral
+hello Baby,neutral
+"I,am feeling so paly best telugu song",neutral
+"I,am feeling so paly best telugu song",neutral
+"I'm just feeling neutral, nothing much is going on.",negative
+"I'm just feeling neutral, nothing much is going on.",negative
+"I am feeling severely stressed and having a panic attack, please activate SOS Calm Mode right now and help me.",negative
+"I am feeling severely stressed and having a panic attack, please activate SOS Calm Mode right now and help me.",negative
+iam feeling alone play the  song,negative
+iam feeling alone play the  song,negative
+I want to listen to some Spotify music for my mood.,neutral
+I want to listen to some Spotify music for my mood.,neutral
+[Sent a Photo] Please give me feedback on this photo!  ela vundhi mama e photo,neutral
+[Sent a Photo] Please give me feedback on this photo!  ela vundhi mama e photo,neutral
+Show me the map or route to kakinada,negative
+Show me the map or route to kakinada,negative
+show the map from mandapeta to kakinada,negative
+show the map from mandapeta to kakinada,negative
+I want to listen to some Spotify music for my mood.,neutral
+I want to listen to some Spotify music for my mood.,neutral
+i want the telugu playlist tollywood songs,neutral
+i want the telugu playlist tollywood songs,neutral
+Hi mama,neutral
+Hi mama,neutral
+"I'm just feeling neutral, nothing much is going on.",negative
+"I'm just feeling neutral, nothing much is going on.",negative
+I am feeling really angry and frustrated right now.,negative
+I am feeling really angry and frustrated right now.,negative
+"I am feeling severely stressed and having a panic attack, please activate SOS Calm Mode right now and help me.",negative
+"I am feeling severely stressed and having a panic attack, please activate SOS Calm Mode right now and help me.",negative
+Hi baby,neutral
+Hi baby,neutral
+Nothig baby today is bore,neutral
+Nothig baby today is bore,neutral

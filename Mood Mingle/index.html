@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mood Mingle | AI Best Friend Project</title>
+    <meta name="description"
+        content="Mood Mingle is your premium AI Best Friend. Experience empathetic, personalized conversations with an advanced AI designed to listen and support.">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0514">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- Face API (Emotion Detection) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Cosmic Background Canvas -->
+    <canvas id="star-canvas"></canvas>
+    <div class="cosmic-bg"></div>
+
+    <!-- Full Screen Lock System -->
+    <div id="full-login-screen"
+        style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: radial-gradient(circle at 50% 30%, #30145c 0%, #15092a 40%, #0a0514 100%); z-index: 10000; display: flex; align-items: center; justify-content: center;">
+        <div
+            style="background: rgba(20, 15, 35, 0.6); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px; width: 90%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">💖</div>
+                <h1 style="color: var(--text-primary); font-size: 2rem; margin-bottom: 5px;">Mood Mingle</h1>
+                <p style="color: var(--text-secondary);">Your Classy & Premium AI Best Friend</p>
+            </div>
+            <div id="auth-step-1">
+                <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+                    <label style="color: var(--text-secondary); font-size: 0.9rem;">App Lock</label>
+                    <input type="email" id="auth-email" placeholder="Enter your email"
+                        style="width: 100%; border-radius: 8px; padding: 14px; margin-bottom: 10px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none;"
+                        required>
+                    <input type="tel" id="auth-phone" placeholder="Enter your phone number"
+                        style="width: 100%; border-radius: 8px; padding: 14px; margin-bottom: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: white; font-size: 1rem; outline: none;"
+                        required>
+                </div>
+                <button id="auth-submit-btn"
+                    style="width: 100%; padding: 14px; font-weight: 600; font-size: 1.1rem; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 30px; color: white; cursor: pointer; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);"><i
+                        class="fas fa-unlock-alt"></i> Unlock App</button>
+                <div id="auth-status"
+                    style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #ef4444; min-height: 20px; font-weight: 500;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" id="main-app-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">💖💬</span>
+                    <h1>Mood Mingle <span class="logo-heart">💙</span></h1>
+                </div>
+                <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-comment-medical"></i>
+                    <span>New Chat</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="folder-icon fas fa-folder"></i>
+                    <span>Conversations</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <!-- Hidden bloat features to mimic minimalist Friend App -->
+                <a href="#" class="nav-item" id="journal-nav-btn" style="display: none;">
+                    <i class="fas fa-book"></i>
+                    <span>Mood Journal</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer" style="display: none;">
+                <div class="upgrade-card">
+                    <div class="upgrade-icon"><i class="fas fa-crown"></i></div>
+                    <div class="upgrade-text">
+                        <h4>Premium App UI</h4>
+                        <p>Unlock advanced empathy</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-main">
+            <header class="chat-header">
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="dropdown-container" id="relationship-toggle">
+                    <div class="current-model"
+                        style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span id="current-relationship">Best Friend 💙</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <span id="typing-status"
+                            style="font-size: 0.75rem; color: #10b981; font-weight: 500; display: flex; align-items: center; gap: 4px; transition: color 0.3s;"><span
+                                class="online-dot"
+                                style="width: 8px; height: 8px; background-color: #10b981; border-radius: 50%; display: inline-block; box-shadow: 0 0 5px #10b981; animation: pulse-dot 2s infinite;"></span>
+                            Online</span>
+                    </div>
+                    <div class="dropdown-menu" id="relationship-menu">
+                        <div class="dropdown-item active" data-role="friend">Best Friend 💙</div>
+                        <div class="dropdown-item" data-role="romantic">Romantic Partner 💖</div>
+                        <div class="dropdown-item" data-role="sister">Sister 🌸</div>
+                        <div class="dropdown-item" data-role="brother">Brother 🤜</div>
+                        <div class="dropdown-item" data-role="mentor">Mentor 🦉</div>
+                        <div class="dropdown-item" data-role="mother">Mother 👩‍👧</div>
+                        <div class="dropdown-item" data-role="father">Father 👨‍👦</div>
+                        <div class="dropdown-item" data-role="grandmother">Grandmother 👵</div>
+                        <div class="dropdown-item" data-role="grandfather">Grandfather 👴</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="action-btn" title="SOS Calm Mode" id="sos-btn"
+                        style="color: #ef4444; animation: pulse 2s infinite;"><i class="fas fa-heartbeat"></i></button>
+                    <button class="action-btn" title="API Docs" id="api-btn"><i class="fas fa-code"></i></button>
+                    <button class="action-btn" id="settings-btn"><i class="fas fa-cog"></i></button>
+                </div>
+            </header>
+
+            <div class="chat-window" id="chat-window">
+                <!-- Chat Messages Container -->
+                <div class="messages-container" id="messages-container">
+
+                    <!-- User Message -->
+                    <div class="message user-message">
+                        <div class="message-content">
+                            <p>I feel stressed about my future</p>
+                        </div>
+                        <div class="avatar" style="background: rgba(255,255,255,0.15);">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+
+                    <!-- AI Message -->
+                    <div class="message ai-message">
+                        <div class="avatar"
+                            style="padding: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; background: transparent;">
+                            <img src="logo.png" alt="Mood Mingle AI"
+                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <div class="message-content">
+                            <p>Hey... I understand how heavy that can feel.</p>
+                            <p>It's okay to feel uncertain sometimes.</p>
+                            <p>You're not alone in this.</p>
+                            <p>Let's take it one step at a time, okay? 💙</p>
+                        </div>
+                    </div>
+
+                    <!-- User Message -->
+                    <div class="message user-message">
+                        <div class="message-content">
+                            <p>I feel sad today</p>
+                        </div>
+                        <div class="avatar" style="background: rgba(255,255,255,0.15);">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Chat Setup -->
+            <div class="chat-input-area">
+                <div class="input-wrapper" style="align-items: flex-end; padding: 4px 16px;">
+                    <button class="attachment-btn" id="face-scan-btn" title="Face Scan Emotion"
+                        style="margin-bottom: 4px;"><i class="fas fa-smile-beam"></i></button>
+                    <button class="attachment-btn" id="spotify-btn" title="Spotify AI Mood Playlist"
+                        style="margin-bottom: 4px;"><i class="fab fa-spotify" style="color: #1DB954;"></i></button>
+                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                    <button class="attachment-btn" id="image-upload-btn" title="Send a Photo to AI"
+                        style="margin-bottom: 4px;"><i class="fas fa-image"></i></button>
+                    <textarea id="chat-input" placeholder="Type a message (Shift+Enter for new line)..." rows="1"
+                        style="flex-grow: 1; background: transparent; border: none; color: var(--text-primary); font-family: inherit; font-size: 1rem; padding: 12px 10px; outline: none; resize: none; overflow-y: hidden; max-height: 150px;"></textarea>
+                    <button class="mic-btn" style="margin-bottom: 4px;"><i class="fas fa-microphone"></i></button>
+                    <button class="send-btn" id="send-btn" style="margin-bottom: 4px;"><i
+                            class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="footer-note">
+                    Mood Mingle • AI Best Friend Project
+                </div>
+            </div>
+        </main>
+
+        <!-- API Floating Panel (Hidden by default, toggled via code icon) -->
+        <div class="api-panel" id="api-panel">
+            <div class="api-header">
+                <h3>Backend API</h3>
+                <div class="api-controls">
+                    <button><i class="fas fa-expand-alt"></i></button>
+                    <button id="close-api-btn"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="api-method">
+                <span class="method-post">POST</span> <span class="endpoint">/chat</span>
+            </div>
+            <div class="api-section">
+                <div class="api-tab active">JSON</div>
+            </div>
+            <div class="api-content">
+                <div class="api-block">
+                    <div class="api-block-title">Input</div>
+                    <pre><code>{
+  "message": "I feel sad today"
+}</code></pre>
+                </div>
+                <div class="api-block">
+                    <div class="api-block-title">Response</div>
+                    <pre><code>{
+  "mood": "Sad",
+  "reply": "I understand you're feeling\nSad. I'm here for you 💙"
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+
+    <!-- Removed inline modal login section as it's now a full screen blocker -->
+
+    <!-- Mood Journal Modal -->
+    <div class="modal" id="journal-modal">
+        <div class="modal-header">
+            <h2><i class="fas fa-book" style="color:var(--primary-color);"></i> Mood Journal</h2>
+            <button class="close-modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-content">
+            <div style="margin-bottom: 15px;">
+                <textarea id="journal-input"
+                    placeholder="How are you feeling today? Rate your mood and write your thoughts..."
+                    style="width: 100%; height: 100px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: var(--border-radius-sm); color: white; padding: 10px; font-family: inherit; resize: none;"></textarea>
+                <div style="display: flex; gap: 10px; margin-top: 10px; width: 100%;">
+                    <select id="journal-mood-select" class="setting-input" style="flex: 1;">
+                        <option value="Happy 😊">Happy 😊</option>
+                        <option value="Calm 😌">Calm 😌</option>
+                        <option value="Stressed 😩">Stressed 😩</option>
+                        <option value="Sad 😢">Sad 😢</option>
+                        <option value="Angry 😠">Angry 😠</option>
+                    </select>
+                    <button class="app-btn-outline" id="save-journal-btn" style="flex: 1;">Save Entry</button>
+                </div>
+            </div>
+            <div id="journal-entries"
+                style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto;">
+                <!-- Journal entries populated via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Face Emotion Detection Modal -->
+    <div class="modal" id="face-scan-modal">
+        <div class="modal-content" style="text-align: center; max-width: 400px; padding: 20px;">
+            <h2 style="margin-bottom: 10px;"><i class="fas fa-camera"></i> AI Emotion Scan</h2>
+            <p id="face-scan-status" style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 15px;">
+                Initializing Face-API Models...</p>
+            <div
+                style="position: relative; width: 100%; max-width: 320px; margin: 0 auto; border-radius: 12px; overflow: hidden; border: 2px solid var(--primary-color);">
+                <video id="webcam-video" autoplay muted playsinline
+                    style="width: 100%; display: block; border-radius: 10px;"></video>
+                <div id="face-scan-overlay"
+                    style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(96, 165, 250, 0.2); display:none; justify-content:center; align-items:center;">
+                    <div
+                        style="width: 100px; height: 100px; border: 2px dashed white; border-radius: 50%; animation: spin 2s linear infinite;">
+                    </div>
+                </div>
+            </div>
+            <button class="app-btn" id="cancel-scan-btn"
+                style="margin-top: 15px; width: 100%; background: #ef4444;">Cancel Scan</button>
+        </div>
+    </div>
+
+    <!-- Conversations Modal -->
+    <div class="modal" id="conversations-modal">
+        <div class="modal-header">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <h2>Your Conversations</h2>
+                <button id="toggle-hidden-btn"
+                    style="background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); color: var(--text-secondary); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;"><i
+                        class="fas fa-eye"></i> Show Hidden</button>
+            </div>
+            <button class="close-modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-content" id="conversations-list">
+            <!-- Dynamically populated via JS -->
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-header">
+            <h2>Settings</h2>
+            <button class="close-modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-content">
+            <div class="setting-group">
+                <label>Preferred Language</label>
+                <select class="setting-input" id="language-selector">
+                    <option value="auto">Auto-Detect</option>
+                    <option value="en">English</option>
+                    <option value="te">Telugu</option>
+                    <option value="hi">Hindi</option>
+                </select>
+            </div>
+            <div class="setting-group"
+                style="flex-direction: column; align-items: flex-start; gap: 8px; background: rgba(0,255,150,0.05); padding: 10px; border-radius: 8px;">
+                <label style="color: var(--primary);">My Identity (For accurate AI replies)</label>
+                <select class="setting-input" id="user-identity-selector" style="width: 100%;">
+                    <option value="male_friend">I am a Male Friend (Mama/Anna/Thamudu)</option>
+                    <option value="female_friend">I am a Female Friend (Chelli/Akka/Pilla)</option>
+                    <option value="boyfriend">I am Boyfriend (Bava/Baby)</option>
+                    <option value="girlfriend">I am Girlfriend (Baby/Bangaram)</option>
+                    <option value="little_brother">I am Little Brother (Thamudu)</option>
+                    <option value="big_brother">I am Big Brother (Anna)</option>
+                    <option value="little_sister">I am Little Sister (Chelli)</option>
+                    <option value="big_sister">I am Big Sister (Akka)</option>
+                    <option value="child">I am a Son/Daughter</option>
+                    <option value="grandchild">I am a Grandchild</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>App Mode (Theme)</label>
+                <select class="setting-input" id="theme-selector">
+                    <option value="dark">Cosmic Dark (Default)</option>
+                    <option value="light">Light Mode</option>
+                    <option value="love">Love Theme (Romantic)</option>
+                </select>
+            </div>
+            <div class="setting-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <label>Voice Style</label>
+                    <span id="voice-role-label"
+                        style="font-size: 0.8rem; color: var(--text-secondary); background: rgba(0,0,0,0.2); padding: 2px 8px; border-radius: 10px;">Friend
+                        Mode</span>
+                </div>
+                <select class="setting-input" id="voice-selector" style="width: 100%;">
+                    <option value="f1">Female Voice (Sweet)</option>
+                    <option value="f2">Female Voice (Hard / Strict)</option>
+                    <option value="m1">Male Voice (Sweet)</option>
+                    <option value="m2">Male Voice (Hard / Strict)</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>AI Voice Output</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="voice-output-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-group">
+                <label>Push Notifications</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="setting-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <label>Unlock OpenAI (GPT-3 API Key)</label>
+                <input type="password" class="setting-input" id="openai-api-key"
+                    placeholder="Enter OpenAI API Key (sk-...)" style="width: 100%; border-radius: 4px; padding: 8px;">
+                <p style="font-size: 0.75rem; color: var(--text-secondary);">Direct GPT-3 integration for extreme
+                    realism.</p>
+            </div>
+            <div class="setting-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <label>Unlock Real AI (Gemini Key)</label>
+                <input type="password" class="setting-input" id="gemini-api-key" placeholder="Enter Gemini API Key..."
+                    style="width: 100%; border-radius: 4px; padding: 8px;">
+                <p style="font-size: 0.75rem; color: var(--text-secondary);">Leave blank to use the built-in offline NLP
+                    engine.</p>
+            </div>
+            <div class="setting-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <label>App Feedback</label>
+                <textarea class="setting-input" id="app-feedback" placeholder="Write your feedback..."
+                    style="width: 100%; height: 60px; border-radius: 4px; padding: 8px; font-family: inherit; resize: none; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white;"></textarea>
+                <button class="app-btn-outline" id="submit-feedback-btn"
+                    style="align-self: flex-end; padding: 5px 15px; font-size: 0.8rem; background: var(--primary-color); border: none; border-radius: 4px; cursor: pointer; color: white;">Submit</button>
+            </div>
+            <div class="setting-group">
+                <label>Data Backup & Sync</label>
+                <button class="app-btn-outline" id="backup-btn">Backup Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mic Permission Modal -->
+    <div class="modal" id="mic-permission-modal">
+        <div class="modal-content" style="text-align: center; padding: 2.5rem 2rem;">
+            <div style="font-size: 3.5rem; color: var(--primary-color); margin-bottom: 1rem;"><i
+                    class="fas fa-hand-paper"></i></div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Allow Microphone Access?</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.5;">Mood
+                Mingle requires your microphone to listen and enable the AI Voice Assistant.</p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button class="app-btn" id="mic-allow-all" style="font-weight: 600;">Allow all the time</button>
+                <button class="app-btn" id="mic-allow-once"
+                    style="background: rgba(139, 92, 246, 0.15); color: var(--primary-color); font-weight: 600;">Allow
+                    this time</button>
+                <button class="app-btn-outline" id="mic-deny"
+                    style="border-color: rgba(239, 68, 68, 0.4); color: #ef4444; font-weight: 600;">Deny</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-notification" id="toast">Functionality coming soon!</div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => console.log('ServiceWorker registered:', registration))
+                    .catch(error => console.log('ServiceWorker registration failed:', error));
+            });
+        }
+    </script>
+</body>
+
+</html>
